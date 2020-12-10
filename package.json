@@ -12,10 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dataframe-js": "^1.4.4",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-validator": "^6.8.0",
     "milligram": "^1.4.1",
+    "node-fetch": "^2.6.1",
     "nodemon": "^2.0.6",
     "request": "^2.88.2"
   }
