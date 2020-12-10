@@ -22,7 +22,7 @@
     white-space: nowrap;
 
 };
-.panel-heading 
+#panel-head
 {
     position: fixed;
     width: 100%;
@@ -32,7 +32,7 @@
     background-color: black;
     color: white;
     top: 0;};
-    .panel-body
+    #panel-bod
     {
       margin-top: 120px;
 
@@ -42,7 +42,7 @@
 <div class="container">
     <h2>Blog Spot</h2>
     <div class="panel panel-default">
-      <div class="panel-heading">
+      <div class="panel-heading" id="panel-head">
         <form action="/getData" method="post">
             <div class="row">
                 <div class="form-group col-md-2">
@@ -72,7 +72,7 @@
 
         </form>
       </div>
-      <div class="panel-body">
+      <div class="panel-body" id="panel-bod">
         <div class="list-group">
             <% posts.forEach((post) => { %>
               <div  class="list-group-item">

@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();   
 const apiData = require("../apiData");
 const fetch = require('node-fetch');
-
+var blogData;
+var languageList;
 
 //requests to /
 router.get('/', async function(req,res){
@@ -10,29 +11,58 @@ router.get('/', async function(req,res){
   const apiResponse = await fetch(url);
   const json = await apiResponse.json()
   const data= json.blog;
-  var languageList=apiData.languagesList(data);
+  blogData=data;
+  languageList=apiData.languagesList(data);
   var postsList=apiData.posts(data);
- 
-
   res.render('index',{languages:  languageList, posts: postsList});
-
-  //  apiData.allData().then((data)=>
-  //   {
-  //     console.log(data);
-  //     //languageList= apiData.languagesList(data);
-
-  //     res.render('index',{languages:  [{id: 1, lang: "English"},{id: 2,lang:"Spanish"},{id: 3, lang:"German"}], posts: apiData.posts()});
-  //   });
   });
   
 
   //requests to /getData
 router.post('/getData',function(req,res,next){
-    var lang= req.body.language;
-    var topic= req.body.topic;
-    var date= req.body.date;
-    console.log(lang,topic,date)
-    res.render('index',{languages: languages,posts: posts});
-});
+  var postsList=apiData.posts(blogData);
+  var lang="";
+  var topic="";
+  var date= "";
+  var result = postsList;
+  if(typeof req.body != 'undefined')
+  {
+    lang= req.body.language;
+    topic= req.body.topic;
+    date= req.body.date;
+    if(lang != "" && lang != "all")
+    {
+      result =postsList.filter(function(post)
+      {
+        return post?.lang === lang;
+      });
+
+    }
+    if(topic != "")
+    {
+      result =result.filter(function(post)
+      {
+        return post.title?.toLowerCase().includes(topic.toLowerCase());
+      });
+    }
+    var checkDate= new Date(date);
+    console.log("IS DATE VALID : "+ checkDate);
+    if(date != null)
+    {
+      console.log("checkDate : "+checkDate);
+      result =result.filter(function(post)
+      {
+        var tempDate= new Date(post.date);
+        console.log(tempDate);
+
+        return tempDate.getTime() === checkDate.getTime();
+      });
+
+    }
+
+  }
+  
+    res.render('index',{languages:  languageList, posts: result});
+  });
 
 module.exports = router;
