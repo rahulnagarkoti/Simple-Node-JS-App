@@ -1,47 +1,26 @@
 const express = require('express');
-const server = express();
+const app = express();
 const path = require('path');
-const router = express.Router();   
+const routes = require('./routes/index');
 
-    // fake posts to simulate a database
-    const posts = [
-        {
-          id: 1,
-          author: 'John',
-          title: 'Templating with EJS',
-          body: 'Blog post number 1'
-        },
-        {
-          id: 2,
-          author: 'Drake',
-          title: 'Express: Starting from the Bottom',
-          body: 'Blog post number 2'
-        },
-        {
-          id: 3,
-          author: 'Emma',
-          title: 'Streams',
-          body: 'Blog post number 3'
-        },
-        {
-          id: 4,
-          author: 'Cody',
-          title: 'Events',
-          body: 'Blog post number 4'
-        }
-      ]
-      const languages = [{id: 1, lang: "English"},{id: 2,lang:"Spanish"},{id: 3, lang:"German"}];
-
-//setup view template
-server.set('view engine','ejs');
-
-//requests to /
-router.get('/',function(req,res){
-  res.render('index',{languages: languages,posts: posts});
+app.use((req,res,next)=>
+{
+    res.header('Access-Control-Allow-Origin','*');
+    res.header('Access-Control-Allow-Headers','*');
+    if(req.method === "OPTIONS")
+    {
+        res.header('Access-Control-Allow-Methods','PUT,POST,GET,DELETE');
+        return res.status(200).json({});
+    }
+    next();
 });
 
 
-//add the router and start the server
-server.use('/', router);
-server.listen(process.env.port || 3000);
+//setup view template
+app.set('view engine','ejs');
+
+
+//add the router and start the app
+app.use('/', routes);
+app.listen(process.env.port || 3000);
 console.log('Running at Port 3000');

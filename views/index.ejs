@@ -1,37 +1,52 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
 
-<form action="/search" method="GET">
-    <div class="row">
-        <div class="form-group col-md-3">
-        </div>
-    <div class="form-group col-md-2">
-        <label>Language :</label>
-        <select id="language" class="form-control" >
-            <% languages.forEach((item)=>{ %>
-                <option value="<%= item.id%>"><%= item.lang%></option>
-                <% })%>
-        </select>
+
+<div class="container">
+    <h2>Blog Spot</h2>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <form action="/getData" method="post">
+            <div class="row">
+                <div class="form-group col-md-3">
+                </div>
+            <div class="form-group col-md-2">
+                <label>Language </label>
+                <select id="language" class="form-control" name="language">
+                    <% languages.forEach((item)=>{ %>
+                        <option value="<%= item.id%>"><%= item.lang%></option>
+                        <% })%>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Topic </label>
+                <input id="topic" class="form-control" name="topic" placeholder="Enter keywords.."/>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Date Posted </label>
+                <input type="date" name="date" class="form-control" />
+            </div>
+            </div>
+            <div class="row">
+                <div class=" form group col-md-5"></div>
+                <button class="button" type="submit">Search</button>
+            </div>
+        </form>
+      </div>
+      <div class="panel-body">
+        <div class="list-group">
+            <% posts.forEach((post) => { %>
+              <a href="/post/<%= post.id %>" class="list-group-item">
+                <h4 class="list-group-item-heading"><%= post.title %></h4>
+                <p class="list-group-item-text"><%= post.author %></p>
+              </a>
+            <% }) %>
+          </div>
+      </div>
     </div>
-    <div class="form-group col-md-2">
-        <label>Topic :</label>
-        <input id="topic" class="form-control" placeholder="Enter keywords.."/>
-    </div>
-    <div class="form-group col-md-2">
-        <label>Date Posted :</label>
-        <input type="date" id="date" class="form-control" />
-    </div>
-    </div>
-    <div class="row">
-        <div class=" form group col-md-5"></div>
-        <button class="button" type="submit">Search</button>
-    </div>
-</form>
-<div class="list-group">
-    <% posts.forEach((post) => { %>
-      <a href="/post/<%= post.id %>" class="list-group-item">
-        <h4 class="list-group-item-heading"><%= post.title %></h4>
-        <p class="list-group-item-text"><%= post.author %></p>
-      </a>
-    <% }) %>
   </div>
+
+  <script>
+
+  </script>
