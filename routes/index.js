@@ -14,7 +14,7 @@ router.get('/', async function(req,res){
   blogData=data;
   languageList=apiData.languagesList(data);
   var postsList=apiData.posts(data);
-  res.render('index',{languages:  languageList, posts: postsList});
+  res.render('index',{languages:  languageList, posts: postsList, previousTopic: "", previousDate:"",previousLang:"all"});
   });
   
 
@@ -30,13 +30,13 @@ router.post('/getData',function(req,res,next){
     lang= req.body.language;
     topic= req.body.topic;
     date= req.body.date;
+    
     if(lang != "" && lang != "all")
     {
       result =postsList.filter(function(post)
       {
         return post?.lang === lang;
       });
-
     }
     if(topic != "")
     {
@@ -45,24 +45,20 @@ router.post('/getData',function(req,res,next){
         return post.title?.toLowerCase().includes(topic.toLowerCase());
       });
     }
-    var checkDate= new Date(date);
-    console.log("IS DATE VALID : "+ checkDate);
-    if(date != null)
+    var checkDate= new Date(date).getTime();
+
+    if(date != null && !isNaN(checkDate))
     {
-      console.log("checkDate : "+checkDate);
       result =result.filter(function(post)
       {
-        var tempDate= new Date(post.date);
+        var tempDate= new Date(post.date).getTime();
         console.log(tempDate);
 
-        return tempDate.getTime() === checkDate.getTime();
+        return tempDate === checkDate;
       });
-
     }
-
-  }
-  
-    res.render('index',{languages:  languageList, posts: result});
+  }  
+    res.render('index',{languages:  languageList, posts: result, previousTopic: topic, previousDate:date,previousLang:lang});
   });
 
 module.exports = router;

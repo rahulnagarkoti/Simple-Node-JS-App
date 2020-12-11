@@ -2,15 +2,6 @@ const fetch = require('node-fetch');
 
 module.exports = 
 {
-    allData: async function()
-    {
-        var data;
-        let url='https://www.healthcare.gov/api/blog.json';
-        const apiResponse = await fetch(url);
-        const json = await apiResponse.json()
-        return json.blog;
-
-    },
     filterData: function(lang,topic,date)
     {
         resarray=[];
@@ -43,15 +34,20 @@ module.exports =
                     languageArray.push({id: item.lang, lang: "Other"});
                 }
             });
-            
-        return [... new Set(languageArray)];
+            //filter out the distinct elements only
+            const unique = Array.from(new Set(languageArray.map(a => a.id)))
+            .map(id => {
+              return languageArray.find(a => a.id === id)
+            });
+        return unique;
     },
     posts: function(data)
     {
         var posts=[];
         data.forEach(item=>
             { 
-                posts.push({title: item.title, content:item.content, date:item.date, lang: item.lang})                
+                var tempDate= item.date.split(" ")[0];
+                posts.push({title: item.title, content:item.content, date: tempDate, lang: item.lang})                
             });
         return posts; 
     }
