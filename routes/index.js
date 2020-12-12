@@ -2,63 +2,94 @@ const express = require('express');
 const router = express.Router();   
 const apiData = require("../apiData");
 const fetch = require('node-fetch');
+//global variables
 var blogData;
 var languageList;
 
+
 //requests to /
 router.get('/', async function(req,res){
-  let url='https://www.healthcare.gov/api/blog.json';
-  const apiResponse = await fetch(url);
-  const json = await apiResponse.json()
-  const data= json.blog;
-  blogData=data;
-  languageList=apiData.languagesList(data);
-  var postsList=apiData.posts(data);
-  res.render('index',{languages:  languageList, posts: postsList, previousTopic: "", previousDate:"",previousLang:"all"});
-  });
+  try
+  {
+    let url='https://www.healthcare.gov/api/blog.json';
+    //api request -> incase of any errors , catch block will deal with it
+    const apiResponse = await fetch(url);
+    //wait for the json response
+    const json = await apiResponse.json()
+    const data= json.blog;
+    //storing the data in a global variable
+    blogData=data;
+    //get the language list array for dropdown
+    languageList=apiData.languagesList(data);
+    //get the posts to be displayed 
+    var postsList=apiData.posts(data);
+    res.render('index',{languages:  languageList, posts: postsList, previousTopic: "", previousDate:"",previousLang:"all"});
+  }
+  catch(error)
+  {
+    console.log(error);
+    res.render('error');
+  }
   
+  });
 
   //requests to /getData
 router.post('/getData',function(req,res,next){
-  var postsList=apiData.posts(blogData);
-  var lang="";
+  //default values
+  var lang="all";
   var topic="";
   var date= "";
-  var result = postsList;
-  if(typeof req.body != 'undefined')
+  try
   {
-    lang= req.body.language;
-    topic= req.body.topic;
-    date= req.body.date;
-    
-    if(lang != "" && lang != "all")
+    var postsList=apiData.posts(blogData);
+    var result = postsList;
+    if(typeof req.body != 'undefined')
     {
-      result =postsList.filter(function(post)
+      //value entered in the from
+      lang= req.body.language;
+      topic= req.body.topic;
+      date= req.body.date;
+      
+      //dont filter language if its default
+      if(lang != "" && lang != "all")
       {
-        return post?.lang === lang;
-      });
-    }
-    if(topic != "")
-    {
-      result =result.filter(function(post)
+        result =postsList.filter(function(post)
+        {
+          return post?.lang === lang;
+        });
+      }
+      //dont topic lang if its default
+      if(topic != "")
       {
-        return post.title?.toLowerCase().includes(topic.toLowerCase());
-      });
-    }
-    var checkDate= new Date(date).getTime();
-
-    if(date != null && !isNaN(checkDate))
-    {
-      result =result.filter(function(post)
+        //filtering
+        result =result.filter(function(post)
+        {
+          return post.title?.toLowerCase().includes(topic.toLowerCase());
+        });
+      }
+      var checkDate= new Date(date).getTime();
+      //dont filter date if its invalid
+      if(date != null && !isNaN(checkDate))
       {
-        var tempDate= new Date(post.date).getTime();
-        console.log(tempDate);
-
-        return tempDate === checkDate;
-      });
-    }
-  }  
+        result =result.filter(function(post)
+        {
+          var tempDate= new Date(post.date).getTime();
+          console.log(tempDate);
+  
+          return tempDate === checkDate;
+        });
+      }
+  
+    }  
+    console.log(lang);
     res.render('index',{languages:  languageList, posts: result, previousTopic: topic, previousDate:date,previousLang:lang});
-  });
+  
+  }
+  catch(error)
+  {
+    console.log(error);
+    res.render('error');
+  }  
+});
 
 module.exports = router;

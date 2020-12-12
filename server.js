@@ -2,15 +2,14 @@ const express = require('express');
 const app = express();
 const routes = require('./routes/index');
 const bodyParser = require("body-parser");
+const path = require("path");
 
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
-/**bodyParser.json(options)
- * Parses the text as JSON and exposes the resulting object on req.body.
- */
+//Parses the text as JSON and exposes the resulting object on req.body.
 app.use(bodyParser.json());
+//CORS HANDLING
 app.use((req,res,next)=>
 {
     res.header('Access-Control-Allow-Origin','*');
@@ -23,10 +22,8 @@ app.use((req,res,next)=>
     next();
 });
 
-
 //setup view template
 app.set('view engine','ejs');
-
 
 //add the router and start the app
 app.use('/', routes);

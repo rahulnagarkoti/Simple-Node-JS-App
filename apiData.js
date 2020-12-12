@@ -2,23 +2,11 @@ const fetch = require('node-fetch');
 
 module.exports = 
 {
-    filterData: function(lang,topic,date)
-    {
-        resarray=[];
-        //filter data
-        console.log(this.allData());
-        this.allData().forEach(element => {
-            if(element.lang.Contains(lang))
-            {
-                resarray.add(element);
-
-            } 
-        });
-
-    },
     languagesList: function(data)
     {
+        //default option
         var languageArray=[{id:"all",lang:"All"}];
+        // add various languages in the language array
         data.forEach(item=>
             {
                 if(item.lang == "en")
@@ -46,6 +34,7 @@ module.exports =
         var posts=[];
         data.forEach(item=>
             { 
+                //extract the date
                 var tempDate= item.date.split(" ")[0];
                 posts.push({title: item.title, content:item.content, date: tempDate, lang: item.lang})                
             });
