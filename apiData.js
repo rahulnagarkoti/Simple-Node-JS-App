@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 
 module.exports = 
 {
+    //retrieves the various languages from the blogs to populate the dropdoen
     languagesList: function(data)
     {
         //default option
@@ -29,6 +30,7 @@ module.exports =
             });
         return unique;
     },
+    //
     posts: function(data)
     {
         var posts=[];

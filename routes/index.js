@@ -11,18 +11,16 @@ var languageList;
 router.get('/', async function(req,res){
   try
   {
-    let url='https://www.healthcare.gov/api/blog.json';
     //api request -> incase of any errors , catch block will deal with it
-    const apiResponse = await fetch(url);
+    const apiResponse = await fetch('https://www.healthcare.gov/api/blog.json').then(res => res.json());
     //wait for the json response
-    const json = await apiResponse.json()
-    const data= json.blog;
+    //const json = await apiResponse.json()
+    blogData= apiResponse.blog;
     //storing the data in a global variable
-    blogData=data;
     //get the language list array for dropdown
-    languageList=apiData.languagesList(data);
+    languageList=apiData.languagesList(blogData);
     //get the posts to be displayed 
-    var postsList=apiData.posts(data);
+    var postsList=apiData.posts(blogData);
     res.render('index',{languages:  languageList, posts: postsList, previousTopic: "", previousDate:"",previousLang:"all"});
   }
   catch(error)
