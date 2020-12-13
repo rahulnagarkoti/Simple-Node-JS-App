@@ -30,7 +30,7 @@ module.exports =
             });
         return unique;
     },
-    //
+    //retrieves
     posts: function(data)
     {
         var posts=[];

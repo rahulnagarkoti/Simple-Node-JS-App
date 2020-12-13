@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();   
-const apiData = require("../apiData");
+const apiData = require("../globalFunctions");
 const fetch = require('node-fetch');
 //global variables
 var blogData;
 var languageList;
-
 
 //requests to /
 router.get('/', async function(req,res){
@@ -27,11 +26,10 @@ router.get('/', async function(req,res){
   {
     console.log(error);
     res.render('error');
-  }
-  
-  });
+  }  
+});
 
-  //requests to /getData
+//requests to /getData
 router.post('/getData',function(req,res,next){
   //default values
   var lang="all";
@@ -71,17 +69,13 @@ router.post('/getData',function(req,res,next){
       {
         result =result.filter(function(post)
         {
-          var tempDate= new Date(post.date).getTime();
-          console.log(tempDate);
-  
+          var tempDate= new Date(post.date).getTime();  
           return tempDate === checkDate;
         });
       }
   
     }  
-    console.log(lang);
-    res.render('index',{languages:  languageList, posts: result, previousTopic: topic, previousDate:date,previousLang:lang});
-  
+    res.render('index',{languages:  languageList, posts: result, previousTopic: topic, previousDate:date,previousLang:lang});  
   }
   catch(error)
   {

@@ -7,8 +7,9 @@ const path = require("path");
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-//Parses the text as JSON and exposes the resulting object on req.body.
+//Parses the text as JSON 
 app.use(bodyParser.json());
+
 //CORS HANDLING
 app.use((req,res,next)=>
 {
