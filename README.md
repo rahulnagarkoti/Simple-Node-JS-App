@@ -1,5 +1,5 @@
 # NodeJSForm
-Internship Task using a JavaScript framework. NodeJS and Express has been implemented to achieve the deliverable.
+Simple task using a JavaScript framework. NodeJS and Express has been implemented to achieve the deliverable.
 
 => Instructions to run the project:
 
